@@ -1,0 +1,19 @@
+% You are an expert React engineer.
+% Create an <InvoiceUploader /> component for an invoice processing SaaS.
+
+<include>context/frontend_preamble.prompt</include>
+
+% Requirements
+1. Props: onUpload(file: File) callback — no internal fetch
+2. Accept: PDF and image files only (pdf, png, jpg, jpeg, tiff)
+3. Drag-and-drop zone + click-to-browse fallback
+4. Show file name, size, and type badge after selection
+5. Validate file size <= 10MB; show inline error if exceeded
+6. Show upload progress bar (0–100%) via onProgress prop
+7. Reject multiple files — single invoice per upload
+
+% What NOT in prompt
+- Drag-and-drop implementation (grounding handles react-dropzone pattern)
+- File type icon rendering (grounding)
+- Tailwind classes and styling (preamble)
+- Progress bar animation CSS (preamble)

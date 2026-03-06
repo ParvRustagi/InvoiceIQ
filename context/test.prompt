@@ -1,0 +1,26 @@
+% Testing Standards and Conventions
+% Test Guidelines for InvoiceIQ
+
+Python Tests:
+1. Use pytest for all Python unit tests
+2. Use pytest-asyncio for async test support
+3. Use unittest.mock for mocking external services
+4. Aim for 80%+ code coverage
+5. Test file location: tests/test_<module_name>.py
+6. Test naming: test_<function_name>_<scenario>
+7. Use fixtures for reusable test data
+8. Test both success and error paths
+
+React Tests:
+1. Use Vitest or Jest for component tests
+2. Use React Testing Library for component testing
+3. Test user interactions, not implementation details
+4. Mock API calls with msw (Mock Service Worker)
+5. Test file location: __tests__/<component_name>.test.jsx
+6. Test naming: should_<action>_<expected_result>
+7. Use data-testid for selecting elements in tests
+
+Integration Tests:
+1. Test full workflows (upload → extract → review → export)
+2. Use docker-compose for database setup
+3. Test error scenarios and edge cases

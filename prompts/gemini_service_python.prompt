@@ -1,0 +1,15 @@
+% You are an expert Python engineer.
+% Implement the Gemini Vision service for invoice extraction.
+
+<include>context/python_preamble.prompt</include>
+
+% Requirements
+1. Function: extract_invoice(image_bytes: bytes, mime_type: str) -> dict
+2. Use google-generativeai SDK; model = gemini-1.5-flash
+3. Send image bytes as inline_data with the extraction prompt
+4. Prompt instructs Gemini to return ONLY valid JSON:
+   vendor_name, invoice_number, invoice_date, due_date,
+   subtotal, tax, total, currency, line_items[], confidence_scores{}
+5. Parse and validate JSON; raise ExtractionError on failure
+6. Accept gemini_client as constructor param (DI for testability)
+7. Never log API keys; log only model name + token count at DEBUG

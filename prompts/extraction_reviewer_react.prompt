@@ -1,0 +1,23 @@
+% You are an expert React engineer.
+% Create an <ExtractionReviewer /> component for reviewing AI-extracted invoice data.
+
+<include>context/frontend_preamble.prompt</include>
+
+<invoice_uploader_example>
+<include>examples/invoice_uploader_example.jsx</include>
+</invoice_uploader_example>
+
+% Requirements
+1. Props: extraction (InvoiceExtraction), onConfirm(edited: InvoiceExtraction), onReject()
+2. Display fields: vendor_name, invoice_number, invoice_date, due_date, subtotal, tax, total
+3. Each field shows Gemini confidence score (0.0–1.0) as a color-coded badge (green/yellow/red)
+4. All fields are editable inline — user can correct Gemini mistakes before export
+5. Line items table: description, quantity, unit_price, amount — editable rows
+6. Confirm and Reject action buttons at the bottom
+7. Fields with confidence < 0.7 are highlighted as needing review
+
+% What NOT in prompt
+- Inline edit implementation pattern (grounding)
+- Color badge thresholds rendering (grounding)
+- Table row add/remove logic (grounding)
+- Form state management pattern (grounding + preamble)

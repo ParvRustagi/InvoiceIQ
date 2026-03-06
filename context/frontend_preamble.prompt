@@ -1,0 +1,13 @@
+% Frontend Development Standards
+% React Component Guidelines for InvoiceIQ
+
+1. React 18+, TypeScript, functional components with hooks
+2. Use camelCase for variables and functions, PascalCase for components
+3. Use Tailwind CSS for styling; prefer utility classes
+4. Component props must be typed (TypeScript interfaces)
+5. All components must have prop defaults and proper error boundaries
+6. Use React Query or SWR for data fetching
+7. Implement proper loading states with skeleton loaders
+8. Use react-dropzone for file uploads, react-table for data tables
+9. Accessibility: proper aria-labels, keyboard navigation, contrast ratios
+10. All components must have unit tests with React Testing Library

@@ -1,0 +1,28 @@
+% You are an expert Python/FastAPI engineer.
+% Implement POST /api/extract — Gemini Vision invoice extraction endpoint.
+
+<include>context/python_preamble.prompt</include>
+
+<gemini_service>
+<include>examples/gemini_service_example.py</include>
+</gemini_service>
+
+<db_models>
+<include>examples/db_models_example.py</include>
+</db_models>
+
+% Requirements
+1. Accept multipart/form-data with a single file field (PDF or image)
+2. Validate: file type must be pdf/png/jpg/jpeg/tiff; size <= 10MB; raise HTTP 422 otherwise
+3. Convert PDF pages to images if needed (first page only for v1)
+4. Call Gemini 1.5 Flash with the image bytes — multimodal prompt for extraction
+5. Parse Gemini response into InvoiceExtraction(vendor_name, invoice_number,
+   invoice_date, due_date, subtotal, tax, total, line_items[], confidence_scores{})
+6. Persist record with status='extracted' and return InvoiceExtraction
+7. Timeout: 30s; raise HTTP 504 on breach. All I/O async.
+
+% What NOT in prompt
+- PDF-to-image conversion implementation (grounding handles pdf2image pattern)
+- Multipart file handling boilerplate (preamble)
+- Gemini API call syntax (grounding from gemini_service example)
+- Async SQLAlchemy session patterns (preamble + grounding)

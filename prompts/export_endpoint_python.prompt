@@ -1,0 +1,24 @@
+% You are an expert Python/FastAPI engineer.
+% Implement invoice export to CSV and accounting webhook.
+
+<include>context/python_preamble.prompt</include>
+
+<db_models>
+<include>examples/db_models_example.py</include>
+</db_models>
+
+% Requirements
+1. POST /api/export/csv: accept ExportRequest(invoice_ids: list[UUID])
+   — fetch invoices, serialize to CSV, return as StreamingResponse
+2. CSV columns: invoice_number, vendor_name, invoice_date, due_date,
+   subtotal, tax, total, currency, line_items (JSON string), status
+3. POST /api/export/webhook: POST each invoice as JSON to ACCOUNTING_WEBHOOK_URL env var
+4. Webhook payload matches QuickBooks Online invoice import schema
+5. Mark exported invoices with status='exported' and exported_at timestamp
+6. Return WebhookResult(success_count, failed_ids, errors) for webhook export
+
+% What NOT in prompt
+- CSV serialization implementation (grounding handles csv.DictWriter pattern)
+- StreamingResponse boilerplate (grounding)
+- HTTP client for webhook (preamble provides httpx async)
+- QuickBooks field mapping implementation (grounding)

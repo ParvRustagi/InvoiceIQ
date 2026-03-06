@@ -1,0 +1,22 @@
+% You are an expert React engineer.
+% Create an <InvoiceDashboard /> main dashboard component.
+
+<include>context/frontend_preamble.prompt</include>
+
+<extraction_reviewer_example>
+<include>examples/extraction_reviewer_example.jsx</include>
+</extraction_reviewer_example>
+
+% Requirements
+1. Fetch GET /api/invoices on mount; show loading skeleton
+2. Table: invoice_number, vendor_name, invoice_date, total, status badge, actions
+3. Status values: pending | extracted | reviewed | exported — color-coded badges
+4. Row actions: View (open ExtractionReviewer), Export CSV, Delete
+5. Bulk export: checkbox selection + Export Selected button
+6. Summary cards at top: total invoices, total value, pending review count
+7. Filter by status; sort by date or total
+
+% What NOT in prompt
+- Table sort implementation (grounding)
+- Checkbox selection logic (grounding)
+- Filter dropdown pattern (grounding + preamble)

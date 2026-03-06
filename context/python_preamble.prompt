@@ -1,0 +1,6 @@
+Use Python 3.11+. All code async. Use type hints everywhere. 
+Use snake_case for functions and variables. 
+Use httpx for HTTP clients. 
+Use loguru for logging. Never log secrets or API keys.
+Retry transient errors with exponential backoff (max 3 attempts).
+All functions must have docstrings.
