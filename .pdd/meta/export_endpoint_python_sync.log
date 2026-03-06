@@ -1,0 +1,1 @@
+{"timestamp": "2026-03-06T14:55:16.891786", "operation": "generate", "reason": "Manual invocation via CLI", "invocation_mode": "manual", "estimated_cost": 0.0, "confidence": 0.0, "decision_type": "unknown", "success": false, "duration": 39.61450147628784, "actual_cost": 0.0, "model": "unknown", "error": "An unexpected error occurred: Insufficient credits"}

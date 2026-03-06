@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "pdd_version": "0.0.168",
+  "timestamp_utc": "20260306T202123Z",
+  "argv": [
+    "connect"
+  ],
+  "cwd": "C:\\Users\\parvr\\Desktop\\InvoiceIQ",
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]"
+  },
+  "global_options": {
+    "force": false,
+    "strength": null,
+    "temperature": null,
+    "time": 0.25,
+    "verbose": false,
+    "quiet": false,
+    "local": false,
+    "context": null,
+    "output_cost": null,
+    "review_examples": false
+  },
+  "invoked_subcommands": [],
+  "total_cost": 0.0,
+  "steps": [],
+  "errors": [],
+  "environment": {
+    "PATH": "C:\\Users\\parvr\\.venvs\\pdd\\Scripts;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Go\\bin;C:\\Program Files\\nodejs\\;D:\\parv\\ffmpeg-7.1.1-essentials_build\\ffmpeg-7.1.1-essentials_build\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\GitHub CLI\\;C:\\Users\\parvr\\.venvs\\pdd\\pdd\\pdd-InvoiceIQ;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Python312\\;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Launcher\\;C:\\Users\\parvr\\.local\\bin;C:\\Users\\parvr\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\parvr\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.2.5\\bin;C:\\Users\\parvr\\go\\bin;C:\\Users\\parvr\\AppData\\Roaming\\npm;C:\\Users\\parvr\\AppData\\Local\\Programs\\Ollama;C:\\Users\\parvr\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\users\\parvr\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.11_qbz5n2kfra8p0\\localcache\\local-packages\\python311\\scripts",
+    "VIRTUAL_ENV": "C:\\Users\\parvr\\.venvs\\pdd",
+    "PDD_PATH": "C:\\Users\\parvr\\.venvs\\pdd\\Lib\\site-packages\\pdd",
+    "PDD_ENV": "prod"
+  },
+  "file_contents": {},
+  "terminal_output": "=== STDOUT ===\nChecking for updates...\nCORS configured for origins: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:9876', \n'http://127.0.0.1:9876', 'https://pdd.dev', 'https://www.pdd.dev']\nServing frontend from: C:\\Users\\parvr\\.venvs\\pdd\\Lib\\site-packages\\pdd\\frontend\\dist\nPDD Server starting...\nProject Root: C:\\Users\\parvr\\Desktop\\InvoiceIQ\nRemote session heartbeat and command polling started\nCommand polling started\nRequest: GET /logo.svg from 127.0.0.1\nResponse: 200 took 21.54ms\nWarning: Network error getting commands: \nShutting down PDD Server...\nCommand polling stopped\nRemote session heartbeat and command polling stopped\nShutdown complete.\nWarning: Error deregistering session: \n\n--- Command Execution Summary ---\n-------------------------------------\n"
+}

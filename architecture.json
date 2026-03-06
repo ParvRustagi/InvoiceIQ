@@ -1,241 +1,141 @@
-{
-  "project": {
-    "name": "InvoiceIQ",
-    "version": "1.0.0",
-    "description": "AI-powered invoice processing SaaS — upload PDF/image, Gemini Vision extracts data, export to CSV/accounting",
-    "pdd_cli_version": "0.0.134",
-    "pdd_install": "uv tool install pdd-cli",
-    "pdd_source": "https://github.com/promptdriven/pdd",
-    "stack": {
-      "frontend": "React",
-      "backend": "FastAPI (Python)",
-      "ai_vision": "Gemini 2.5 Flash (multimodal — PDF + image)",
-      "ai_extraction": "Gemini 2.5 Pro (structured JSON extraction)",
-      "database": "SQLite (dev) / PostgreSQL (prod)",
-      "export": "CSV + REST webhook to accounting APIs"
+[
+  {
+    "reason": "Core database models needed by all backend modules",
+    "description": "SQLAlchemy 2.0 async models for Invoice table. Fields: id (UUID PK), file_name, file_type, status (enum: pending/extracted/reviewed/exported), vendor_name, invoice_number, invoice_date, due_date, subtotal, tax, total, currency (default USD), line_items (JSON), confidence_scores (JSON), exported_at, created_at (auto UTC). Provides async engine and session factory.",
+    "dependencies": [],
+    "priority": 1,
+    "filename": "db_models_Python.prompt",
+    "filepath": "src/db/models.py",
+    "tags": ["backend", "data"],
+    "interface": {
+      "type": "module",
+      "module": {
+        "functions": [
+          { "name": "Invoice", "signature": "class Invoice(Base)", "returns": "Invoice instance" },
+          { "name": "get_session", "signature": "async def get_session() -> AsyncSession", "returns": "AsyncSession" }
+        ]
+      }
     }
   },
-
-  "dev_units": [
-    {
-      "id": "unit-a",
-      "name": "Unit A — Frontend",
-      "color": "#7B61FF",
-      "glow": "#7B61FF33",
-      "icon": "◈",
-      "role": "Prompt → React UI Module",
-      "domain": "frontend",
-      "preamble": "context/frontend_preamble.prompt",
-      "sync_cmd": "pdd --force sync invoice_upload",
-      "prompts": [
-        {
-          "id": "A1",
-          "title": "InvoiceUploader",
-          "status": "done",
-          "prompt_file": "prompts/invoice_uploader_react.prompt",
-          "code_file": "src/components/InvoiceUploader.jsx",
-          "example_file": "examples/invoice_uploader_example.jsx",
-          "test_file": "tests/test_invoice_uploader.jsx",
-          "ratio": "~22%",
-          "pdd_reason": "Drag-and-drop file upload for PDF/image invoices with validation and upload progress.",
-          "pdd_interface": {
-            "type": "frontend",
-            "frontend": { "pages": [{ "name": "InvoiceUploader", "route": "/upload" }] }
-          },
-          "pdd_deps": [],
-          "prompt": "% You are an expert React engineer.\n% Create an <InvoiceUploader /> component for an invoice processing SaaS.\n\n<include>context/frontend_preamble.prompt</include>\n\n% Requirements\n1. Props: onUpload(file: File) callback — no internal fetch\n2. Accept: PDF and image files only (pdf, png, jpg, jpeg, tiff)\n3. Drag-and-drop zone + click-to-browse fallback\n4. Show file name, size, and type badge after selection\n5. Validate file size <= 10MB; show inline error if exceeded\n6. Show upload progress bar (0–100%) via onProgress prop\n7. Reject multiple files — single invoice per upload",
-          "what_NOT_in_prompt": [
-            "Drag-and-drop implementation (grounding handles react-dropzone pattern)",
-            "File type icon rendering (grounding)",
-            "Tailwind classes and styling (preamble)",
-            "Progress bar animation CSS (preamble)"
-          ]
-        },
-        {
-          "id": "A2",
-          "title": "ExtractionReviewer",
-          "status": "done",
-          "prompt_file": "prompts/extraction_reviewer_react.prompt",
-          "code_file": "src/components/ExtractionReviewer.jsx",
-          "example_file": "examples/extraction_reviewer_example.jsx",
-          "test_file": "tests/test_extraction_reviewer.jsx",
-          "ratio": "~25%",
-          "pdd_reason": "Editable review panel for Gemini-extracted invoice fields before export — shows confidence scores.",
-          "pdd_interface": {
-            "type": "frontend",
-            "frontend": { "pages": [{ "name": "ExtractionReviewer", "route": "/review" }] }
-          },
-          "pdd_deps": ["invoice_uploader_react.prompt"],
-          "prompt": "% You are an expert React engineer.\n% Create an <ExtractionReviewer /> component for reviewing AI-extracted invoice data.\n\n<include>context/frontend_preamble.prompt</include>\n\n<invoice_uploader_example>\n<include>examples/invoice_uploader_example.jsx</include>\n</invoice_uploader_example>\n\n% Requirements\n1. Props: extraction (InvoiceExtraction), onConfirm(edited: InvoiceExtraction), onReject()\n2. Display fields: vendor_name, invoice_number, invoice_date, due_date, subtotal, tax, total\n3. Each field shows Gemini confidence score (0.0–1.0) as a color-coded badge (green/yellow/red)\n4. All fields are editable inline — user can correct Gemini mistakes before export\n5. Line items table: description, quantity, unit_price, amount — editable rows\n6. Confirm and Reject action buttons at the bottom\n7. Fields with confidence < 0.7 are highlighted as needing review",
-          "what_NOT_in_prompt": [
-            "Inline edit implementation pattern (grounding)",
-            "Color badge thresholds rendering (grounding)",
-            "Table row add/remove logic (grounding)",
-            "Form state management pattern (grounding + preamble)"
-          ]
-        },
-        {
-          "id": "A3",
-          "title": "InvoiceDashboard",
-          "status": "in-progress",
-          "prompt_file": "prompts/invoice_dashboard_react.prompt",
-          "code_file": "src/components/InvoiceDashboard.jsx",
-          "example_file": "examples/invoice_dashboard_example.jsx",
-          "test_file": "tests/test_invoice_dashboard.jsx",
-          "ratio": "~20%",
-          "pdd_reason": "Main dashboard listing all processed invoices with status, totals, and export controls.",
-          "pdd_interface": {
-            "type": "frontend",
-            "frontend": { "pages": [{ "name": "InvoiceDashboard", "route": "/" }] }
-          },
-          "pdd_deps": ["extraction_reviewer_react.prompt"],
-          "prompt": "% You are an expert React engineer.\n% Create an <InvoiceDashboard /> main dashboard component.\n\n<include>context/frontend_preamble.prompt</include>\n\n<extraction_reviewer_example>\n<include>examples/extraction_reviewer_example.jsx</include>\n</extraction_reviewer_example>\n\n% Requirements\n1. Fetch GET /api/invoices on mount; show loading skeleton\n2. Table: invoice_number, vendor_name, invoice_date, total, status badge, actions\n3. Status values: pending | extracted | reviewed | exported — color-coded badges\n4. Row actions: View (open ExtractionReviewer), Export CSV, Delete\n5. Bulk export: checkbox selection + Export Selected button\n6. Summary cards at top: total invoices, total value, pending review count\n7. Filter by status; sort by date or total",
-          "what_NOT_in_prompt": [
-            "Table sort implementation (grounding)",
-            "Checkbox selection logic (grounding)",
-            "Filter dropdown pattern (grounding + preamble)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "unit-b",
-      "name": "Unit B — AI/ML Backend",
-      "color": "#00D4AA",
-      "glow": "#00D4AA33",
-      "icon": "⬡",
-      "role": "Prompt → FastAPI Route / Gemini Pipeline",
-      "domain": "backend",
-      "preamble": "context/python_preamble.prompt",
-      "sync_cmd": "pdd --force sync extraction_endpoint",
-      "prompts": [
-        {
-          "id": "B1",
-          "title": "extraction_endpoint",
-          "status": "done",
-          "prompt_file": "prompts/extraction_endpoint_python.prompt",
-          "code_file": "app/routes/extraction.py",
-          "example_file": "examples/extraction_endpoint_example.py",
-          "test_file": "tests/test_extraction_endpoint.py",
-          "ratio": "~26%",
-          "pdd_reason": "POST /api/extract — receives PDF/image, calls Gemini Vision for multimodal extraction, returns structured InvoiceExtraction.",
-          "pdd_interface": {
-            "type": "api",
-            "api": {
-              "endpoints": [
-                { "method": "POST", "path": "/api/extract", "requestSchema": "multipart/form-data (file)", "responseSchema": "InvoiceExtraction" }
-              ]
-            }
-          },
-          "pdd_deps": ["gemini_service_python.prompt", "db_models_python.prompt"],
-          "prompt": "% You are an expert Python/FastAPI engineer.\n% Implement POST /api/extract — Gemini Vision invoice extraction endpoint.\n\n<include>context/python_preamble.prompt</include>\n\n<gemini_service>\n<include>examples/gemini_service_example.py</include>\n</gemini_service>\n\n<db_models>\n<include>examples/db_models_example.py</include>\n</db_models>\n\n% Requirements\n1. Accept multipart/form-data with a single file field (PDF or image)\n2. Validate: file type must be pdf/png/jpg/jpeg/tiff; size <= 10MB; raise HTTP 422 otherwise\n3. Convert PDF pages to images if needed (first page only for v1)\n4. Call Gemini 1.5 Flash with the image bytes — multimodal prompt for extraction\n5. Parse Gemini response into InvoiceExtraction(vendor_name, invoice_number,\n   invoice_date, due_date, subtotal, tax, total, line_items[], confidence_scores{})\n6. Persist record with status='extracted' and return InvoiceExtraction\n7. Timeout: 30s; raise HTTP 504 on breach. All I/O async.",
-          "what_NOT_in_prompt": [
-            "PDF-to-image conversion implementation (grounding handles pdf2image pattern)",
-            "Multipart file handling boilerplate (preamble)",
-            "Gemini API call syntax (grounding from gemini_service example)",
-            "Async SQLAlchemy session patterns (preamble + grounding)"
-          ]
-        },
-        {
-          "id": "B2",
-          "title": "gemini_service",
-          "status": "done",
-          "prompt_file": "prompts/gemini_service_python.prompt",
-          "code_file": "app/services/gemini_service.py",
-          "example_file": "examples/gemini_service_example.py",
-          "test_file": "tests/test_gemini_service.py",
-          "ratio": "~24%",
-          "pdd_reason": "Shared Gemini Vision service — encapsulates API key, model config, multimodal invocation, and structured JSON parsing.",
-          "pdd_interface": {
-            "type": "module",
-            "module": {
-              "functions": [
-                { "name": "extract_invoice", "signature": "(image_bytes: bytes, mime_type: str) -> dict", "returns": "dict" },
-                { "name": "build_extraction_prompt", "signature": "() -> str", "returns": "str" }
-              ]
-            }
-          },
-          "pdd_deps": [],
-          "prompt": "% You are an expert Python engineer.\n% Implement the Gemini Vision service for invoice extraction.\n\n<include>context/python_preamble.prompt</include>\n\n% Requirements\n1. Function: extract_invoice(image_bytes, mime_type) -> dict\n2. Use google-generativeai SDK; model = gemini-1.5-flash\n3. Send image bytes as inline_data with the extraction prompt\n4. Extraction prompt instructs Gemini to return ONLY valid JSON with fields:\n   vendor_name, invoice_number, invoice_date, due_date, subtotal, tax,\n   total, currency, line_items[], confidence_scores{}\n5. Parse and validate JSON response; raise ExtractionError on parse failure\n6. Accept gemini_client as constructor parameter (dependency injection for testability)\n7. Never log API keys; log only model name and token count at DEBUG level",
-          "what_NOT_in_prompt": [
-            "google-generativeai SDK instantiation details (grounding)",
-            "JSON parsing boilerplate (grounding)",
-            "Retry/backoff logic (preamble handles this)",
-            "Logging format (preamble)"
-          ]
-        },
-        {
-          "id": "B3",
-          "title": "export_endpoint",
-          "status": "todo",
-          "prompt_file": "prompts/export_endpoint_python.prompt",
-          "code_file": "app/routes/export.py",
-          "example_file": "examples/export_endpoint_example.py",
-          "test_file": "tests/test_export_endpoint.py",
-          "ratio": "~22%",
-          "pdd_reason": "POST /api/export — exports reviewed invoices to CSV file or webhook to accounting system.",
-          "pdd_interface": {
-            "type": "api",
-            "api": {
-              "endpoints": [
-                { "method": "POST", "path": "/api/export/csv", "requestSchema": "ExportRequest", "responseSchema": "CSV file download" },
-                { "method": "POST", "path": "/api/export/webhook", "requestSchema": "ExportRequest", "responseSchema": "WebhookResult" }
-              ]
-            }
-          },
-          "pdd_deps": ["db_models_python.prompt"],
-          "prompt": "% You are an expert Python/FastAPI engineer.\n% Implement invoice export to CSV and accounting webhook.\n\n<include>context/python_preamble.prompt</include>\n\n<db_models>\n<include>examples/db_models_example.py</include>\n</db_models>\n\n% Requirements\n1. POST /api/export/csv: accept ExportRequest(invoice_ids: list[UUID])\n   — fetch invoices, serialize to CSV, return as StreamingResponse\n2. CSV columns: invoice_number, vendor_name, invoice_date, due_date,\n   subtotal, tax, total, currency, line_items (JSON string), status\n3. POST /api/export/webhook: POST each invoice as JSON to ACCOUNTING_WEBHOOK_URL env var\n4. Webhook payload matches QuickBooks Online invoice import schema\n5. Mark exported invoices with status='exported' and exported_at timestamp\n6. Return WebhookResult(success_count, failed_ids, errors) for webhook export",
-          "what_NOT_in_prompt": [
-            "CSV serialization implementation (grounding handles csv.DictWriter pattern)",
-            "StreamingResponse boilerplate (grounding)",
-            "HTTP client for webhook (preamble provides httpx async)",
-            "QuickBooks field mapping implementation (grounding)"
-          ]
-        }
-      ]
+  {
+    "reason": "Shared Gemini Vision service used by extraction endpoint",
+    "description": "Wraps google-generativeai SDK. Accepts image bytes + mime_type, sends multimodal prompt to gemini-1.5-flash, returns structured JSON with invoice fields and per-field confidence scores. Accepts gemini_client as constructor param for dependency injection. Never logs API keys.",
+    "dependencies": [],
+    "priority": 2,
+    "filename": "gemini_service_Python.prompt",
+    "filepath": "src/services/gemini_service.py",
+    "tags": ["backend", "ai"],
+    "context_urls": [
+      { "url": "https://ai.google.dev/gemini-api/docs/vision", "purpose": "Gemini Vision multimodal API docs" },
+      { "url": "https://ai.google.dev/gemini-api/docs/structured-output", "purpose": "Gemini structured JSON output" }
+    ],
+    "interface": {
+      "type": "module",
+      "module": {
+        "functions": [
+          { "name": "extract_invoice", "signature": "def extract_invoice(image_bytes: bytes, mime_type: str) -> dict", "returns": "dict with invoice fields and confidence_scores" },
+          { "name": "build_extraction_prompt", "signature": "def build_extraction_prompt() -> str", "returns": "str" }
+        ]
+      }
     }
-  ],
-
-  "pdd_workflow": {
-    "sync_loop": ["auto-deps", "generate", "example", "crash", "verify", "test", "fix", "update"],
-    "permanent_assets": ["prompts/", "tests/", "context/"],
-    "ephemeral_artifacts": ["app/", "src/", "examples/"],
-    "context_files": {
-      "python_preamble": "context/python_preamble.prompt",
-      "frontend_preamble": "context/frontend_preamble.prompt",
-      "test_conventions": "context/test.prompt"
-    },
-    "naming_convention": "<basename>_<language>.prompt",
-    "ratio_target": "10-30% of expected code size"
   },
-
-  "file_structure": {
-    "prompts": [
-      "prompts/invoice_uploader_react.prompt",
-      "prompts/extraction_reviewer_react.prompt",
-      "prompts/invoice_dashboard_react.prompt",
-      "prompts/extraction_endpoint_python.prompt",
-      "prompts/gemini_service_python.prompt",
-      "prompts/export_endpoint_python.prompt"
+  {
+    "reason": "Core AI pipeline — receives upload and returns structured invoice data",
+    "description": "FastAPI route POST /api/extract. Accepts multipart file (PDF or image). Validates type (pdf/png/jpg/jpeg/tiff) and size <=10MB, raises HTTP 422 on fail. Converts PDF first page to PNG via pdf2image. Calls gemini_service.extract_invoice(). Persists with status=extracted. Returns InvoiceExtraction. Timeout 30s, HTTP 504 on breach. All async.",
+    "dependencies": ["gemini_service_Python.prompt", "db_models_Python.prompt"],
+    "priority": 3,
+    "filename": "extraction_endpoint_Python.prompt",
+    "filepath": "src/routes/extraction.py",
+    "tags": ["backend", "api"],
+    "context_urls": [
+      { "url": "https://fastapi.tiangolo.com/tutorial/request-files/", "purpose": "FastAPI file upload handling" },
+      { "url": "https://pdf2image.readthedocs.io/en/latest/", "purpose": "pdf2image PDF to PNG conversion" }
     ],
-    "context": ["context/python_preamble.prompt", "context/frontend_preamble.prompt", "context/test.prompt"],
-    "examples": [
-      "examples/invoice_uploader_example.jsx",
-      "examples/extraction_reviewer_example.jsx",
-      "examples/gemini_service_example.py",
-      "examples/db_models_example.py"
+    "interface": {
+      "type": "api",
+      "api": {
+        "endpoints": [
+          { "method": "POST", "path": "/api/extract", "requestSchema": "multipart/form-data (file)", "responseSchema": "InvoiceExtraction" }
+        ]
+      }
+    }
+  },
+  {
+    "reason": "Export layer — CSV download and accounting webhook",
+    "description": "FastAPI routes for export. POST /api/export/csv accepts list of invoice UUIDs, returns StreamingResponse CSV with columns: invoice_number, vendor_name, invoice_date, due_date, subtotal, tax, total, currency, line_items (JSON string), status. POST /api/export/webhook posts invoices as JSON to ACCOUNTING_WEBHOOK_URL env var (QuickBooks Online schema). Marks invoices status=exported + exported_at. Returns WebhookResult(success_count, failed_ids, errors).",
+    "dependencies": ["db_models_Python.prompt"],
+    "priority": 4,
+    "filename": "export_endpoint_Python.prompt",
+    "filepath": "src/routes/export.py",
+    "tags": ["backend", "api"],
+    "interface": {
+      "type": "api",
+      "api": {
+        "endpoints": [
+          { "method": "POST", "path": "/api/export/csv", "requestSchema": "ExportRequest(invoice_ids: list[UUID])", "responseSchema": "StreamingResponse CSV" },
+          { "method": "POST", "path": "/api/export/webhook", "requestSchema": "ExportRequest(invoice_ids: list[UUID])", "responseSchema": "WebhookResult(success_count, failed_ids, errors)" }
+        ]
+      }
+    }
+  },
+  {
+    "reason": "Entry point UI for uploading invoice files",
+    "description": "React drag-and-drop upload component. Props: onUpload(file: File), onProgress(pct: number). Accepts pdf/png/jpg/jpeg/tiff only. Single file per upload. Max 10MB with inline error. Shows file name, size, type badge after selection. No internal fetch — delegates to parent via onUpload callback.",
+    "dependencies": [],
+    "priority": 5,
+    "filename": "invoice_uploader_JavaScriptReact.prompt",
+    "filepath": "src/components/InvoiceUploader.jsx",
+    "tags": ["frontend"],
+    "interface": {
+      "type": "component",
+      "component": {
+        "props": [
+          { "name": "onUpload", "type": "(file: File) => void", "required": true },
+          { "name": "onProgress", "type": "(pct: number) => void", "required": false }
+        ]
+      }
+    }
+  },
+  {
+    "reason": "Review panel for AI-extracted invoice data before export",
+    "description": "React component for reviewing and editing Gemini-extracted invoice fields. Props: extraction (InvoiceExtraction), onConfirm(edited: InvoiceExtraction), onReject(). All fields editable inline. Confidence badge per field: green >=0.85, yellow >=0.70, red <0.70. Line items table editable. Fields below 0.70 highlighted for review. Confirm and Reject buttons at bottom.",
+    "dependencies": ["invoice_uploader_JavaScriptReact.prompt"],
+    "priority": 6,
+    "filename": "extraction_reviewer_JavaScriptReact.prompt",
+    "filepath": "src/components/ExtractionReviewer.jsx",
+    "tags": ["frontend"],
+    "interface": {
+      "type": "component",
+      "component": {
+        "props": [
+          { "name": "extraction", "type": "InvoiceExtraction", "required": true },
+          { "name": "onConfirm", "type": "(edited: InvoiceExtraction) => void", "required": true },
+          { "name": "onReject", "type": "() => void", "required": true }
+        ]
+      }
+    }
+  },
+  {
+    "reason": "Main dashboard listing all processed invoices with actions",
+    "description": "React main dashboard. Fetches GET /api/invoices on mount with loading skeleton. Table shows invoice_number, vendor_name, invoice_date, total, status badge, row actions (View, Export CSV, Delete). Status values: pending/extracted/reviewed/exported with color-coded badges. Bulk export via checkbox + Export Selected button. Summary cards: total invoices, total value, pending count. Filter by status, sort by date or total.",
+    "dependencies": ["extraction_reviewer_JavaScriptReact.prompt"],
+    "priority": 7,
+    "filename": "invoice_dashboard_JavaScriptReact.prompt",
+    "filepath": "src/components/InvoiceDashboard.jsx",
+    "tags": ["frontend"],
+    "context_urls": [
+      { "url": "https://tanstack.com/table/latest/docs/introduction", "purpose": "TanStack Table for sortable/filterable invoice table" }
     ],
-    "tests": [
-      "tests/test_invoice_uploader.jsx",
-      "tests/test_extraction_reviewer.jsx",
-      "tests/test_extraction_endpoint.py",
-      "tests/test_gemini_service.py",
-      "tests/test_export_endpoint.py"
-    ],
-    "pdd_meta": [
-      ".pdd/meta/extraction_endpoint_python.json",
-      ".pdd/meta/gemini_service_python.json"
-    ],
-    "config": ["invoiceiq-architecture.json", ".pddrc", "requirements.txt", "package.json", ".env.example"]
+    "interface": {
+      "type": "page",
+      "page": {
+        "route": "/",
+        "renderingModel": "client",
+        "dataSources": [
+          { "kind": "api", "source": "GET /api/invoices", "method": "GET", "description": "Fetch all invoices on mount" },
+          { "kind": "api", "source": "POST /api/export/csv", "method": "POST", "description": "Export selected invoices to CSV" }
+        ]
+      }
+    }
   }
-}
+]

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "pdd_version": "0.0.168",
+  "timestamp_utc": "20260306T210458Z",
+  "argv": [
+    "--force",
+    "generate",
+    "prompts\\invoice_dashboard_react.prompt",
+    "--output",
+    "C:\\Users\\parvr\\Desktop\\InvoiceIQ\\src\\components\\InvoiceDashboard.jsx"
+  ],
+  "cwd": "C:\\Users\\parvr\\Desktop\\InvoiceIQ",
+  "platform": {
+    "system": "Windows",
+    "release": "11",
+    "version": "10.0.26200",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]"
+  },
+  "global_options": {
+    "force": true,
+    "strength": null,
+    "temperature": null,
+    "time": 0.25,
+    "verbose": false,
+    "quiet": false,
+    "local": false,
+    "context": null,
+    "output_cost": null,
+    "review_examples": false
+  },
+  "invoked_subcommands": [
+    "generate"
+  ],
+  "total_cost": 0.0,
+  "steps": [
+    {
+      "step": 1,
+      "command": "generate",
+      "cost": 0.0,
+      "model": "error"
+    }
+  ],
+  "errors": [],
+  "environment": {
+    "PATH": "C:\\Users\\parvr\\.venvs\\pdd\\Scripts;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\Go\\bin;C:\\Program Files\\nodejs\\;D:\\parv\\ffmpeg-7.1.1-essentials_build\\ffmpeg-7.1.1-essentials_build\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\GitHub CLI\\;C:\\Users\\parvr\\.venvs\\pdd\\pdd\\pdd-InvoiceIQ;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Python312\\Scripts\\;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Python312\\;C:\\Users\\parvr\\AppData\\Local\\Programs\\Python\\Launcher\\;C:\\Users\\parvr\\.local\\bin;C:\\Users\\parvr\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\parvr\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2023.2.5\\bin;C:\\Users\\parvr\\go\\bin;C:\\Users\\parvr\\AppData\\Roaming\\npm;C:\\Users\\parvr\\AppData\\Local\\Programs\\Ollama;C:\\Users\\parvr\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\users\\parvr\\appdata\\local\\packages\\pythonsoftwarefoundation.python.3.11_qbz5n2kfra8p0\\localcache\\local-packages\\python311\\scripts",
+    "PDD_ENV": "prod",
+    "PDD_FORCE": "1",
+    "PDD_JOB_DEADLINE": "1772832884.5288649",
+    "PDD_PATH": "C:\\Users\\parvr\\.venvs\\pdd\\Lib\\site-packages\\pdd",
+    "PDD_SKIP_UPDATE_CHECK": "1",
+    "VIRTUAL_ENV": "C:\\Users\\parvr\\.venvs\\pdd"
+  },
+  "file_contents": {
+    ".pdd\\meta\\extraction_reviewer_react.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T21:02:13.389379+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}",
+    "prompts\\invoice_dashboard_react.prompt": "% You are an expert React engineer.\n% Create an <InvoiceDashboard /> main dashboard component.\n\n<include>context/frontend_preamble.prompt</include>\n\n<extraction_reviewer_example>\n<include>examples/extraction_reviewer_example.jsx</include>\n</extraction_reviewer_example>\n\n% Requirements\n1. Fetch GET /api/invoices on mount; show loading skeleton\n2. Table: invoice_number, vendor_name, invoice_date, total, status badge, actions\n3. Status values: pending | extracted | reviewed | exported \u2014 color-coded badges\n4. Row actions: View (open ExtractionReviewer), Export CSV, Delete\n5. Bulk export: checkbox selection + Export Selected button\n6. Summary cards at top: total invoices, total value, pending review count\n7. Filter by status; sort by date or total\n\n% What NOT in prompt\n- Table sort implementation (grounding)\n- Checkbox selection logic (grounding)\n- Filter dropdown pattern (grounding + preamble)\n",
+    ".pdd\\meta\\invoice_dashboard_react.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T21:04:58.614742+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}",
+    ".pdd\\meta\\db_models_python.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T20:43:08.263613+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}",
+    ".pdd\\meta\\extraction_endpoint_python.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T20:52:51.380481+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}",
+    ".pdd\\meta\\invoice_uploader_react.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T21:00:29.942151+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}",
+    ".pdd\\meta\\gemini_service_python.json": "{\n  \"pdd_version\": \"0.0.168\",\n  \"timestamp\": \"2026-03-06T20:48:39.208993+00:00\",\n  \"command\": \"generate\",\n  \"prompt_hash\": null,\n  \"code_hash\": null,\n  \"example_hash\": null,\n  \"test_hash\": null,\n  \"test_files\": null,\n  \"include_deps\": null\n}"
+  },
+  "terminal_output": "=== STDOUT ===\nChecking for updates...\nCould not determine language from input files or options.\nError during path construction: Could not determine language from input files \nor options.\n\n--- Command Execution Summary ---\n  Step 1 (generate): Cost: $0.000000, Model: error\nTotal Estimated Cost: $0.000000\n-------------------------------------\n"
+}

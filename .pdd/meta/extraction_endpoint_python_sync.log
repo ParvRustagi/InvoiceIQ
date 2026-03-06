@@ -1,0 +1,1 @@
+{"timestamp": "2026-03-06T14:51:50.210187", "operation": "generate", "reason": "Manual invocation via CLI", "invocation_mode": "manual", "estimated_cost": 0.0, "confidence": 0.0, "decision_type": "unknown", "success": true, "duration": 61.16628885269165, "actual_cost": 0.0, "model": "unknown", "error": null}

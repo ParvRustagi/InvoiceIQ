@@ -1,0 +1,4 @@
+{"timestamp": "2026-03-06T14:38:21.451230", "type": "event", "event_type": "sync_start", "details": {"pid": 11136}, "invocation_mode": "sync"}
+{"timestamp": "2026-03-06T14:38:21.458329", "type": "event", "event_type": "lock_acquired", "details": {"pid": 11136}, "invocation_mode": "sync"}
+{"timestamp": "2026-03-06T14:38:21.495874", "type": "event", "event_type": "lock_released", "details": {"pid": 11136, "total_cost": 0.0}, "invocation_mode": "sync"}
+{"timestamp": "2026-03-06T14:42:18.494184", "operation": "generate", "reason": "Manual invocation via CLI", "invocation_mode": "manual", "estimated_cost": 0.0, "confidence": 0.0, "decision_type": "unknown", "success": true, "duration": 49.76443314552307, "actual_cost": 0.0, "model": "unknown", "error": null}
