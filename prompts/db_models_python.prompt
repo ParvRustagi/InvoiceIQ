@@ -1,0 +1,18 @@
+% You are an expert Python engineer.
+% Implement SQLAlchemy async database models for InvoiceIQ.
+
+<include>context/python_preamble.prompt</include>
+
+% Requirements
+1. Invoice table with fields: id (UUID, PK), file_name (str),
+   file_type (str), status (enum: pending/extracted/reviewed/exported),
+   vendor_name (str|null), invoice_number (str|null),
+   invoice_date (date|null), due_date (date|null),
+   subtotal (Decimal|null), tax (Decimal|null), total (Decimal|null),
+   currency (str, default USD), line_items (JSON),
+   confidence_scores (JSON), exported_at (datetime|null),
+   created_at (datetime, auto UTC)
+2. Use SQLAlchemy 2.0 async declarative base
+3. Provide async engine and session factory
+4. Include alembic-compatible Base for migrations
+5. All Decimal fields use Numeric(10,2)

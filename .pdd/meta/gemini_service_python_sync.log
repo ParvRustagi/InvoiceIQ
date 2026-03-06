@@ -1,0 +1,3 @@
+{"timestamp": "2026-03-06T13:50:44.951182", "type": "event", "event_type": "sync_start", "details": {"pid": 17560}, "invocation_mode": "sync"}
+{"timestamp": "2026-03-06T13:50:45.115332", "type": "event", "event_type": "lock_acquired", "details": {"pid": 17560}, "invocation_mode": "sync"}
+{"timestamp": "2026-03-06T13:50:45.192221", "type": "event", "event_type": "lock_released", "details": {"pid": 17560, "total_cost": 0.0}, "invocation_mode": "sync"}
